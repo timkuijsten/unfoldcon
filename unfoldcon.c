@@ -25,7 +25,7 @@ enum states { NORM, ESCAPE };
 int
 main(int argc, char *argv[])
 {
-  char c;
+  int c;
   enum states state;
 
   if (argc != 1)
