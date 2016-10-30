@@ -46,7 +46,11 @@ main(int argc, char *argv[])
     case ESCAPE:
       switch (c) {
       case '\n':
-        /* swallow \ + \n */
+        /* swallow \ + \n and following blanks */
+        while ((c = getc(stdin)) != EOF && (c == ' ' || c == '\t'))
+          ;
+        if (c != EOF)
+          putc(c, stdout);
         break;
       default:
         putc('\\', stdout);
