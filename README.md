@@ -1,7 +1,7 @@
 # unfoldcon
 
 Unfold continuation lines. Prepend every line that ends with a "\" character to
-the next line.
+the next line. Remove any leading blanks from the continuation line.
 
 
 ## Usage
@@ -10,19 +10,19 @@ Consider the following file:
 
 ```sh
     $ cat example.txt
-    This is a \
-    continuation line.
+      This is a \
+        continuation line.
     But these
-    are not.
+      are not.
 ```
 
 unfoldcon reads from stdin en writes to stdout:
 
 ```sh
     $ cat example.txt | unfoldcon
-    This is a continuation line.
+      This is a continuation line.
     But these
-    are not.
+      are not.
 ```
 
 
