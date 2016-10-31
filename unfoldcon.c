@@ -40,7 +40,8 @@ main(int argc, char *argv[])
         state = ESCAPE;
         break;
       default:
-        putc(c, stdout);
+        if (putc(c, stdout) == EOF)
+          err(1, NULL);
       }
       break;
     case ESCAPE:
@@ -50,11 +51,14 @@ main(int argc, char *argv[])
         while ((c = getc(stdin)) != EOF && (c == ' ' || c == '\t'))
           ;
         if (c != EOF)
-          putc(c, stdout);
+          if (putc(c, stdout) == EOF)
+            err(1, NULL);
         break;
       default:
-        putc('\\', stdout);
-        putc(c, stdout);
+        if (putc('\\', stdout) == EOF)
+          err(1, NULL);
+        if (putc(c, stdout) == EOF)
+          err(1, NULL);
       }
       state = NORM;
       break;
