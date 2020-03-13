@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Tim Kuijsten
+ * Copyright (c) 2016, 2020 Tim Kuijsten
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,53 +21,56 @@
 
 enum states { NORM, ESCAPE };
 
-/* unfold continuation lines, lines that end with a "\" */
+/*
+ * Unfold continuation lines, lines that end with a "\".
+ */
 int
 main(int argc, char *argv[])
 {
-  int c;
-  enum states state;
+	int c;
+	enum states state;
 
-  if (argc != 1)
-    errx(1, "usage: unfoldcon");
+	if (argc != 1)
+		errx(1, "usage: unfoldcon");
 
-  state = NORM;
+	state = NORM;
 
-  while ((c = getc(stdin)) != EOF)
-    switch (state) {
-    case NORM:
-      switch (c) {
-      case '\\':
-        /* wait for next char */
-        state = ESCAPE;
-        break;
-      default:
-        if (putc(c, stdout) == EOF)
-          err(1, NULL);
-      }
-      break;
-    case ESCAPE:
-      switch (c) {
-      case '\n':
-        /* swallow \ + \n and following blanks */
-        while ((c = getc(stdin)) != EOF && (c == ' ' || c == '\t'))
-          ;
-        if (c != EOF)
-          if (putc(c, stdout) == EOF)
-            err(1, NULL);
-        break;
-      default:
-        if (putc('\\', stdout) == EOF)
-          err(1, NULL);
-        if (putc(c, stdout) == EOF)
-          err(1, NULL);
-      }
-      state = NORM;
-      break;
-    }
+	while ((c = getc(stdin)) != EOF)
+		switch (state) {
+		case NORM:
+			switch (c) {
+			case '\\':
+				/* wait for next char */
+				state = ESCAPE;
+				break;
+			default:
+				if (putc(c, stdout) == EOF)
+					err(1, NULL);
+			}
+			break;
+		case ESCAPE:
+			switch (c) {
+			case '\n':
+				/* swallow \ + \n and following blanks */
+				while ((c = getc(stdin)) != EOF && \
+				    (c == ' ' || c == '\t'))
+					;
+				if (c != EOF)
+					if (putc(c, stdout) == EOF)
+						err(1, NULL);
+				break;
+			default:
+				if (putc('\\', stdout) == EOF)
+					err(1, NULL);
+				if (putc(c, stdout) == EOF)
+					err(1, NULL);
+			}
+			state = NORM;
+			break;
+		}
 
-  if (ferror(stdin))
-    err(1, NULL);
+	if (ferror(stdin))
+		err(1, NULL);
 
-  return 0;
+	return 0;
 }
