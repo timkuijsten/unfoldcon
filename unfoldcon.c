@@ -31,6 +31,8 @@ main(int argc, char *argv[])
   if (argc != 1)
     errx(1, "usage: unfoldcon");
 
+  state = NORM;
+
   while ((c = getc(stdin)) != EOF)
     switch (state) {
     case NORM:
