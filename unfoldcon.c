@@ -25,8 +25,9 @@ enum states { NORM, ESCAPE };
  * Unfold continuation lines, lines that end with a "\".
  */
 int
-main(int argc, char *argv[])
+main(int argc, char **argv)
 {
+	(void)argv; /* silence compiler */
 	int c;
 	enum states state;
 
